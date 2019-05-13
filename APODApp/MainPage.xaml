@@ -8,7 +8,21 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid Background="Black" LostFocus="Grid_LostFocus">
+        <CalendarDatePicker x:Name="MonthCalender" HorizontalAlignment="Left" Margin="75,75,0,0" VerticalAlignment="Top" Width="307" DateChanged="MonthCalendar_DateChanged"/>
+        <Button x:Name="LaunchButton" Content="Go to APOD launch date" HorizontalAlignment="Left" Margin="75,142,0,0" VerticalAlignment="Top" Height="47" Width="203" Click="LaunchButton_Click"/>
+        <Border BorderBrush="White" HorizontalAlignment="Left" Height="226" Margin="75,234,0,0" VerticalAlignment="Top" Width="379" BorderThickness="1,1,1,1"/>
+        <CheckBox x:Name="ShowTodaysImageCheckBox" Content="Show todays image on start up" HorizontalAlignment="Left" Margin="121,260,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="LimitRangeCheckBox" Content="Limit range to current year" HorizontalAlignment="Left" Margin="121,330,0,0" VerticalAlignment="Top" Checked="LimitRangeCheckBox_Checked" Unchecked="LimitRangeCheckBox_Unchecked"/>
+        <TextBlock HorizontalAlignment="Left" Margin="121,390,0,0" Text="Images downloaded today:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="ImagesTodayTextBox" HorizontalAlignment="Left" Margin="333,385,0,0" Text="TextBox" VerticalAlignment="Top" IsReadOnly="True" Background="{x:Null}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="518,728,0,0" Text="Image Credit and Copyright:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="ImageCopyrightTextBox" HorizontalAlignment="Left" Margin="518,753,0,0" Text="TextBox" VerticalAlignment="Top" Width="379" IsReadOnly="True" Background="{x:Null}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="75,495,0,0" Text="Description:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="DescriptionTextBox" HorizontalAlignment="Left" Margin="75,520,0,0" Text="TextBox" VerticalAlignment="Top" Height="285" Width="416" Background="{x:Null}" IsReadOnly="True" TextWrapping="Wrap" FontSize="12"/>
+        <Border x:Name="PictureBorder" BorderBrush="White" HorizontalAlignment="Left" Height="648" Margin="518,75,0,0" VerticalAlignment="Top" Width="946" BorderThickness="1,1,1,1">
+            <Image x:Name="ImagePictureBox" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
+        </Border>
 
     </Grid>
 </Page>
