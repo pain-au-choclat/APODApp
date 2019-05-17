@@ -96,5 +96,17 @@ namespace APODApp
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        protected override void OnActivated(IActivatedEventArgs e)
+        {
+            if(e.Kind == ActivationKind.Protocol)
+            {
+                if(Window.Current.Content == null)
+                {
+                    Window.Current.Content = new MainPage();
+                }
+            }
+            Window.Current.Activate();
+        }
     }
 }

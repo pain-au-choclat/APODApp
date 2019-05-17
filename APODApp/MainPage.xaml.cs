@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Windows.UI.Shell;
+using Windows.ApplicationModel.UserActivities;
+using AdaptiveCards;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -23,6 +26,8 @@ namespace APODApp
         const string SettingShowOnStartup = "show on startup";
         const string SettingImageCountToday = "image count today";
         const string SettingLimitRange = "limit range";
+        UserActivitySession _currentActivity;
+        AdaptiveCard apodTimeLineCard;
 
         Windows.Storage.ApplicationDataContainer localSettings;
 
@@ -121,6 +126,7 @@ namespace APODApp
             MonthCalender.MaxDate = DateTime.Today;
             localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
+            setupForTimeLineAsync();
             ReadSettings();
         }
 
@@ -217,6 +223,55 @@ namespace APODApp
             {
                 MonthCalender.Date = DateTime.Today;
             }
+        }
+
+        private async void setupForTimeLineAsync()
+        {
+            CreateAdaptiveCardForTimeline();
+            await GenerateActivityAsync();
+        }
+
+        private void CreateAdaptiveCardForTimeline()
+        {
+            apodTimeLineCard = new AdaptiveCard("1.0")
+            {
+                BackgroundImage = new Uri("https://docs.microsoft.com/learn/media/wolf-moon.png")
+            };
+
+            var apodHeading = new AdaptiveTextBlock
+            {
+                Text = "APOD UWP",
+                Size = AdaptiveTextSize.Large,
+                Weight = AdaptiveTextWeight.Bolder,
+                Wrap = true,
+                MaxLines = 2
+            };
+            apodTimeLineCard.Body.Add(apodHeading);
+
+            var apodDesc = new AdaptiveTextBlock
+            {
+                Text = "Astronomy Picture of the day",
+                Size = AdaptiveTextSize.Default,
+                Weight = AdaptiveTextWeight.Lighter,
+                Wrap = true,
+                MaxLines = 3,
+                Separator = true
+            };
+            apodTimeLineCard.Body.Add(apodDesc);
+        }
+
+        private async Task GenerateActivityAsync()
+        {
+            UserActivityChannel channel = UserActivityChannel.GetDefault();
+            UserActivity userActivity = await channel.GetOrCreateUserActivityAsync("APOD-UWP");
+            userActivity.VisualElements.DisplayText = "APOD-UWP Timeline activities";
+            userActivity.ActivationUri = new Uri("proto://");
+            userActivity.VisualElements.Content = AdaptiveCardBuilder.CreateAdaptiveCardFromJson(apodTimeLineCard.ToJson());
+            userActivity.ContentType = "application/octet-stream";
+
+            await userActivity.SaveAsync();
+            _currentActivity?.Dispose();
+            _currentActivity = userActivity.CreateSession();
         }
     }
 }
